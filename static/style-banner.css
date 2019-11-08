@@ -1,0 +1,115 @@
+#slide1 {
+  background-image: url(./img/slide-1.jpg);
+  height: 500px;
+  max-width: 100% !important;
+  background-position: 85%; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover;
+}
+.slide2 {
+  background-image: url(./img/slide-2.jpg);
+  height: 500px;
+  max-width: 100% !important;
+  background-position: 30%; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover;
+}
+.slide3 {
+  background-image: url(./img/slide-5.jpg);
+  height: 500px;
+  max-width: 100% !important;
+  background-position: 70%; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover;
+}
+.slick-slider {
+  width: 90%;
+  margin: 1.5rem auto;
+}
+#text-banner {
+  width: 50% !important;
+  padding: 8rem 3rem;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  font-size: 1.1rem;
+}
+#text-banner2 {
+  width: 50% !important;
+  padding: 8rem 3rem;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  float: right;
+  box-sizing: border-box;
+}
+#text-banner3 {
+  width: 100% !important;
+  line-height: 1.6;
+  padding: 2rem 3rem;
+  letter-spacing: 0.02em;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+}
+#text-banner3 > h1,
+#text-banner3 > p {
+  width: 50%;
+}
+h1 {
+  font-weight: 700;
+  letter-spacing: 5px;
+  color: #fff;
+  font-size: 3.5em;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  line-height: 1;
+}
+p {
+  color: #d1d0d0 !important;
+  font-size: 0.9rem;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+@media screen and (max-width: 767px) {
+  #slide1,
+  .slide2,
+  .slide3 {
+    height: 350px !important;
+  }
+  .slide3 {
+    background-position: 50%;
+  }
+  #text-banner,
+  #text-banner2,
+  #text-banner3 {
+    width: 100% !important;
+    padding: 4rem 0.5rem;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  p {
+    font-size: 0.8rem;
+    color: #f9f2f2;
+  }
+}
+@media screen and (width: 768px) {
+  #slide1 {
+    background-position: 50%;
+  }
+  .slide2 {
+    background-position: 50%;
+  }
+  #text-banner2 {
+    width: 50% !important;
+    padding: 8rem 1rem;
+  }
+  #text-banner3 > h1
+  {
+    width: 70%;
+  }
+  #text-banner3 > p {
+      width: 30%;
+  }
+}
