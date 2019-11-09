@@ -93,10 +93,10 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
-/***/ "./components/carousel-banner.js":
-/*!***************************************!*\
-  !*** ./components/carousel-banner.js ***!
-  \***************************************/
+/***/ "./components/carousel/carousel-banner.js":
+/*!************************************************!*\
+  !*** ./components/carousel/carousel-banner.js ***!
+  \************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -109,7 +109,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_slick__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-slick */ "react-slick");
 /* harmony import */ var react_slick__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_slick__WEBPACK_IMPORTED_MODULE_2__);
 
-var _jsxFileName = "C:\\Users\\buianh\\Desktop\\Github\\nguoibangiay.demo\\components\\carousel-banner.js";
+var _jsxFileName = "C:\\Users\\buianh\\Desktop\\Github\\nguoibangiay.demo\\components\\carousel\\carousel-banner.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement;
 
 
@@ -220,6 +220,277 @@ class SimpleSlider extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] {
       },
       __self: this
     }, "Ch\xE0o m\u1EEBng b\u1EA1n \u0111\u1EBFn v\u1EDBi ng\xF4i nh\xE0 Converse! T\u1EA1i \u0111\xE2y, m\u1ED7i m\u1ED9t d\xF2ng ch\u1EEF, m\u1ED7i chi ti\u1EBFt v\xE0 h\xECnh \u1EA3nh \u0111\u1EC1u l\xE0 nh\u1EEFng b\u1EB1ng ch\u1EE9ng mang d\u1EA5u \u1EA5n l\u1ECBch s\u1EED Converse 100 n\u0103m, v\xE0 \u0111ang kh\xF4ng ng\u1EEBng ph\xE1t tri\u1EC3n l\u1EDBn m\u1EA1nh.")))));
+  }
+
+}
+
+/***/ }),
+
+/***/ "./components/carousel/carousel-sanphammoi.js":
+/*!****************************************************!*\
+  !*** ./components/carousel/carousel-sanphammoi.js ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Showproduct; });
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/extends */ "./node_modules/@babel/runtime-corejs2/helpers/esm/extends.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_slick__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-slick */ "react-slick");
+/* harmony import */ var react_slick__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_slick__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _link_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../link-data */ "./components/link-data.js");
+
+
+var _jsxFileName = "C:\\Users\\buianh\\Desktop\\Github\\nguoibangiay.demo\\components\\carousel\\carousel-sanphammoi.js";
+var __jsx = react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement;
+
+
+
+class Showproduct extends react__WEBPACK_IMPORTED_MODULE_2__["Component"] {
+  constructor(props) {
+    super(props);
+
+    Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_1__["default"])(this, "show", () => {
+      this.setState({
+        show: false
+      });
+    });
+
+    Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_1__["default"])(this, "show1", () => {
+      this.setState({
+        show: true
+      });
+    });
+
+    this.state = {
+      dbnewproduct: [],
+      dbbestsell: [],
+      show: true,
+      color: ''
+    };
+  }
+
+  componentDidMount() {
+    // get data sanphammoi
+    fetch(`${_link_data__WEBPACK_IMPORTED_MODULE_4__["default"]}sanphammoi`).then(result => {
+      return result.json();
+    }).then(data => this.setState({
+      dbnewproduct: data
+    })); // get data sanphambanchay
+
+    fetch(`${_link_data__WEBPACK_IMPORTED_MODULE_4__["default"]}sanphambanchay`).then(result => {
+      return result.json();
+    }).then(data => this.setState({
+      dbbestsell: data
+    }));
+  }
+
+  render() {
+    var settings = {
+      dots: false,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 4,
+      slidesToScroll: 4,
+      initialSlide: 0,
+      responsive: [{
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: false
+        }
+      }, {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2
+        }
+      }, {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }]
+    };
+    const {
+      dbnewproduct,
+      dbbestsell,
+      show,
+      color
+    } = this.state;
+    const listnewproduct = dbnewproduct.map((demo, index) => __jsx("div", {
+      key: index,
+      className: "sanphammoi",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 84
+      },
+      __self: this
+    }, __jsx("img", {
+      src: demo.src,
+      className: "item-sanphammoi",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 85
+      },
+      __self: this
+    }), __jsx("br", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 86
+      },
+      __self: this
+    }), __jsx("span", {
+      className: "name",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 87
+      },
+      __self: this
+    }, demo.ten), __jsx("br", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 88
+      },
+      __self: this
+    }), __jsx("span", {
+      className: "gia",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 89
+      },
+      __self: this
+    }, demo.gia.toLocaleString(), " \u0111"), __jsx("br", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 90
+      },
+      __self: this
+    }), __jsx("button", {
+      className: "addcart",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 91
+      },
+      __self: this
+    }, "Th\xEAm v\xE0o gi\u1ECF")));
+    const listbestsell = dbbestsell.map((demo, index) => __jsx("div", {
+      key: index,
+      className: "sanphammoi",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 95
+      },
+      __self: this
+    }, __jsx("img", {
+      src: demo.src,
+      className: "item-sanphammoi",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 96
+      },
+      __self: this
+    }), __jsx("br", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 97
+      },
+      __self: this
+    }), __jsx("span", {
+      className: "name",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 98
+      },
+      __self: this
+    }, demo.ten), __jsx("br", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 99
+      },
+      __self: this
+    }), __jsx("span", {
+      className: "gia",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 100
+      },
+      __self: this
+    }, demo.gia.toLocaleString(), " \u0111"), __jsx("br", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 101
+      },
+      __self: this
+    }), __jsx("button", {
+      className: "addcart",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 102
+      },
+      __self: this
+    }, "Th\xEAm v\xE0o gi\u1ECF")));
+    return __jsx("div", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 106
+      },
+      __self: this
+    }, __jsx("div", {
+      className: "category",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 107
+      },
+      __self: this
+    }, __jsx("button", {
+      className: "btn-category",
+      id: color,
+      onClick: this.show1,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 108
+      },
+      __self: this
+    }, "S\u1EA2N PH\u1EA8M M\u1EDAI NH\u1EA4T"), __jsx("button", {
+      className: "btn-category",
+      id: color,
+      onClick: this.show,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 111
+      },
+      __self: this
+    }, "S\u1EA2N PH\u1EA8M B\xC1N CH\u1EA0Y"), __jsx("button", {
+      className: "btn-category",
+      id: color,
+      onClick: this.show1,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 114
+      },
+      __self: this
+    }, "S\u1EA2N PH\u1EA8M PH\u1ED4 BI\u1EBEN")), show ? __jsx(react_slick__WEBPACK_IMPORTED_MODULE_3___default.a, Object(_babel_runtime_corejs2_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, settings, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 119
+      },
+      __self: this
+    }), listnewproduct) : __jsx(react_slick__WEBPACK_IMPORTED_MODULE_3___default.a, Object(_babel_runtime_corejs2_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({}, settings, {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 121
+      },
+      __self: this
+    }), listbestsell));
   }
 
 }
@@ -713,6 +984,20 @@ class Header extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
 /***/ }),
 
+/***/ "./components/link-data.js":
+/*!*********************************!*\
+  !*** ./components/link-data.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const url = 'https://data-shoes.herokuapp.com/';
+/* harmony default export */ __webpack_exports__["default"] = (url);
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime-corejs2/core-js/object/assign.js":
 /*!**********************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/core-js/object/assign.js ***!
@@ -721,6 +1006,47 @@ class Header extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(/*! core-js/library/fn/object/assign */ "core-js/library/fn/object/assign");
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js ***!
+  \*******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/object/define-property */ "core-js/library/fn/object/define-property");
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _defineProperty; });
+/* harmony import */ var _core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+/* harmony import */ var _core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__);
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    _core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default()(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
 
 /***/ }),
 
@@ -771,9 +1097,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/head */ "next/head");
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/header */ "./components/header.js");
-/* harmony import */ var _components_carousel_banner__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/carousel-banner */ "./components/carousel-banner.js");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! reactstrap */ "reactstrap");
-/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(reactstrap__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _components_carousel_carousel_banner__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/carousel/carousel-banner */ "./components/carousel/carousel-banner.js");
+/* harmony import */ var _components_link_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/link-data */ "./components/link-data.js");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! reactstrap */ "reactstrap");
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(reactstrap__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _components_carousel_carousel_sanphammoi__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/carousel/carousel-sanphammoi */ "./components/carousel/carousel-sanphammoi.js");
 var _jsxFileName = "C:\\Users\\buianh\\Desktop\\Github\\nguoibangiay.demo\\pages\\index.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
@@ -782,23 +1110,95 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
+
+
 class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      phukien: []
+    };
+  }
+
+  componentDidMount() {
+    // get data phukien
+    fetch(`${_components_link_data__WEBPACK_IMPORTED_MODULE_4__["default"]}phukien`).then(result => {
+      return result.json();
+    }).then(data => this.setState({
+      phukien: data
+    }));
   }
 
   render() {
+    const {
+      phukien
+    } = this.state;
+    const listphukien = phukien.map((data, index) => __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_5__["Col"], {
+      lg: "3",
+      key: index,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 30
+      },
+      __self: this
+    }, __jsx("img", {
+      src: data.src,
+      className: "img-phukien",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 31
+      },
+      __self: this
+    }), __jsx("br", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 32
+      },
+      __self: this
+    }), __jsx("span", {
+      className: "name",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 33
+      },
+      __self: this
+    }, data.ten), __jsx("br", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 34
+      },
+      __self: this
+    }), __jsx("span", {
+      className: "gia",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 35
+      },
+      __self: this
+    }, data.gia.toLocaleString(), " \u0111"), __jsx("br", {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 36
+      },
+      __self: this
+    }), __jsx("button", {
+      className: "addcart",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 37
+      },
+      __self: this
+    }, "Th\xEAm v\xE0o gi\u1ECF")));
     return __jsx("div", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 13
+        lineNumber: 41
       },
       __self: this
     }, __jsx(next_head__WEBPACK_IMPORTED_MODULE_1___default.a, {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 14
+        lineNumber: 42
       },
       __self: this
     }, __jsx("link", {
@@ -806,7 +1206,7 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       href: "./static/style-header.css",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 15
+        lineNumber: 43
       },
       __self: this
     }), __jsx("link", {
@@ -814,7 +1214,7 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       href: "./static/style-banner.css",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 16
+        lineNumber: 44
       },
       __self: this
     }), __jsx("link", {
@@ -822,7 +1222,7 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       href: "./static/style-section.css",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 17
+        lineNumber: 45
       },
       __self: this
     }), __jsx("link", {
@@ -832,7 +1232,7 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       href: "https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 18
+        lineNumber: 46
       },
       __self: this
     }), __jsx("link", {
@@ -841,160 +1241,171 @@ class Index extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       href: "https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 24
+        lineNumber: 52
       },
       __self: this
     }), __jsx("title", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 29
+        lineNumber: 57
       },
       __self: this
     }, "nguoibangiay.demo")), __jsx(_components_header__WEBPACK_IMPORTED_MODULE_2__["default"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 31
+        lineNumber: 59
       },
       __self: this
-    }), __jsx(_components_carousel_banner__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), __jsx(_components_carousel_carousel_banner__WEBPACK_IMPORTED_MODULE_3__["default"], {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 32
+        lineNumber: 60
       },
       __self: this
-    }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Row"], {
+    }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_5__["Row"], {
       className: "section1",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 33
+        lineNumber: 62
       },
       __self: this
-    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Col"], {
-      xs: "6",
+    }, __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_5__["Col"], {
       lg: "4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 34
+        lineNumber: 63
       },
       __self: this
     }, __jsx("div", {
       className: "block",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 35
+        lineNumber: 64
       },
       __self: this
     }, __jsx("span", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 36
+        lineNumber: 65
       },
       __self: this
     }, __jsx("img", {
       src: "./static/img/title_block_1.png",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 37
+        lineNumber: 66
       },
       __self: this
     }), __jsx("div", {
       className: "section-block1",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 38
+        lineNumber: 67
       },
       __self: this
     }, __jsx("button", {
       className: "view-btn",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 39
+        lineNumber: 68
       },
       __self: this
-    }, "Xem s\u1EA3n ph\u1EA9m"))))), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Col"], {
-      xs: "6",
+    }, "Xem s\u1EA3n ph\u1EA9m"))))), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_5__["Col"], {
       lg: "4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 44
+        lineNumber: 73
       },
       __self: this
     }, __jsx("div", {
       className: "block",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 45
+        lineNumber: 74
       },
       __self: this
     }, __jsx("span", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 46
+        lineNumber: 75
       },
       __self: this
     }, __jsx("img", {
       src: "./static/img/title_block_2.png",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 47
+        lineNumber: 76
       },
       __self: this
     }), __jsx("div", {
       className: "section-block2",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 48
+        lineNumber: 77
       },
       __self: this
     }, __jsx("button", {
       className: "view-btn",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 49
+        lineNumber: 78
       },
       __self: this
-    }, "Xem s\u1EA3n ph\u1EA9m"))))), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_4__["Col"], {
+    }, "Xem s\u1EA3n ph\u1EA9m"))))), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_5__["Col"], {
       lg: "4",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 54
+        lineNumber: 83
       },
       __self: this
     }, __jsx("div", {
       className: "block",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 55
+        lineNumber: 84
       },
       __self: this
     }, __jsx("span", {
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 56
+        lineNumber: 85
       },
       __self: this
     }, __jsx("img", {
       src: "./static/img/title_block_3.png",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 57
+        lineNumber: 86
       },
       __self: this
     }), __jsx("div", {
       className: "section-block3",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 58
+        lineNumber: 87
       },
       __self: this
     }, __jsx("button", {
       className: "view-btn",
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 59
+        lineNumber: 88
       },
       __self: this
-    }, "Xem s\u1EA3n ph\u1EA9m")))))));
+    }, "Xem s\u1EA3n ph\u1EA9m")))))), __jsx(_components_carousel_carousel_sanphammoi__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 95
+      },
+      __self: this
+    }), __jsx(reactstrap__WEBPACK_IMPORTED_MODULE_5__["Row"], {
+      id: "section-phukien",
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 97
+      },
+      __self: this
+    }, listphukien));
   }
 
 }
@@ -1023,6 +1434,17 @@ module.exports = __webpack_require__(/*! C:\Users\buianh\Desktop\Github\nguoiban
 /***/ (function(module, exports) {
 
 module.exports = require("core-js/library/fn/object/assign");
+
+/***/ }),
+
+/***/ "core-js/library/fn/object/define-property":
+/*!************************************************************!*\
+  !*** external "core-js/library/fn/object/define-property" ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("core-js/library/fn/object/define-property");
 
 /***/ }),
 

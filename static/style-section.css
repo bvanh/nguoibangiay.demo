@@ -3,26 +3,27 @@
   margin: 0 auto;
   margin-top: 2rem;
 }
+button {
+  outline: none;
+}
 .col-lg-4 {
   text-align: center;
-  padding: .2rem;
+  padding: 0.2rem;
   box-sizing: border-box;
 }
 .section-block1 {
   background-image: url(./img/product_block_1.jpg);
   height: 245px;
   max-width: 100%;
-  background-position: 70%; /* Center the image */
+  background-position: center; /* Center the image */
   background-repeat: no-repeat; /* Do not repeat the image */
-  background-size: cover;
 }
 .section-block2 {
   background-image: url(./img/product_block_2.jpg);
   height: 245px;
   max-width: 100%;
-  background-position: 70%; /* Center the image */
+  background-position: center; /* Center the image */
   background-repeat: no-repeat; /* Do not repeat the image */
-  background-size: cover;
 }
 .section-block3 {
   background-image: url(./img/product_block_3.jpg);
@@ -31,86 +32,168 @@
   background-position: center; /* Center the image */
   background-repeat: no-repeat; /* Do not repeat the image */
 }
-.section-block1,.section-block2,.section-block3{
-    margin-top:2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.section-block1,
+.section-block2,
+.section-block3 {
+  margin-top: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.view-btn{
-    background-color: black;
-    border: none;
-    color: rgb(228, 220, 220);
-    height: 2.5rem ;
-    font-weight: 700;
-    width: 40%; 
-    font-size: 1em;
-    transition: all 400ms ease-in-out;
-    position: absolute;
-    opacity: 0;
-    bottom:40%;
+.view-btn {
+  background-color: black;
+  border: none;
+  color: rgb(228, 220, 220);
+  height: 2.5rem;
+  font-weight: 700;
+  width: 40%;
+  font-size: 1em;
+  transition: all 400ms ease-in-out;
+  position: absolute;
+  opacity: 0;
+  bottom: 40%;
 }
-.block:hover .view-btn{
-    opacity: 1;
-    position: absolute;
-    bottom:45%;
+@media screen and (max-width: 1078px) {
+  .view-btn {
+    width: 45%;
+  }
 }
-.block{
-    padding:1rem;
+/* hover animation border */
+.block:hover .view-btn {
+  opacity: 1;
+  bottom: 45%;
 }
-/* .block::after,.block::before {
-    content: '';
-    display: block;
-    width: 0;
-    height: 2px;
-    background: #000;
-    transition: width .3s;
+.block {
+  padding: 1rem;
 }
-.block:hover::after,.block:hover::before {
-    width: 100%;
-} */
-/*----- button 4 -----*/
-.block::before, .block::after{
-    content:"";
-    width: 0;
-    height: 1px;
-    position: absolute;
-    transition: all 0.2s linear;
-    background: rgb(14, 13, 13);
+.block::before,
+.block::after {
+  content: "";
+  width: 0;
+  height: 1px;
+  position: absolute;
+  transition: all 0.2s linear;
+  background: rgb(14, 13, 13);
+}
+
+span::before,
+span::after {
+  content: "";
+  width: 1px;
+  height: 0;
+  position: absolute;
+  transition: all 0.2s linear;
+  background: rgb(14, 13, 13);
+}
+.block::after {
+  right: 0;
+  bottom: 7px;
+  transition-duration: 0.4s;
+}
+.block span::after {
+  right: 7px;
+  bottom: 0;
+  transition-duration: 0.4s;
+}
+.block::before {
+  left: 0;
+  top: 7px;
+  transition-duration: 0.4s;
+}
+.block span::before {
+  left: 7px;
+  top: 0;
+  transition-duration: 0.4s;
+}
+.block:hover::before,
+.block:hover::after {
+  width: 100%;
+}
+.block:hover span::before,
+.block:hover span::after {
+  height: 100%;
+}
+/* end */
+/* section 2 */
+.category {
+  display: flex;
+  justify-content: center;
+  margin: 3rem;
+  border-bottom: 2px solid black;
+}
+.btn-category {
+  background-color: white;
+  border: none;
+  color: rgb(167, 165, 165);
+  height: 2.7rem;
+  font-weight: 700;
+  width: 20%;
+  font-size: 1em;
+}
+@media screen and (max-width: 1024px) {
+  .btn-category {
+    width: 25%;
   }
-  
-  span::before, span::after{
-    content:"";
-    width:1px;
-    height:0;
-    position: absolute;
-    transition: all 0.2s linear;
-    background: rgb(14, 13, 13);
+}
+@media screen and (max-width: 768px) {
+  .btn-category {
+    width: 33.3333%;
+    font-size: 0.8em;
   }
-.block::after{
-    right:0;
-    bottom: 0;
-    transition-duration: 0.4s;
+  .category {
+    width: 95%;
+    margin: 0 auto;
   }
-  .block span::after{
-    right:0;
-    bottom: 0;
-    transition-duration: 0.4s;
-  }
-  .block::before{
-    left: 0;
-    top: 0;
-    transition-duration: 0.4s;
-  }
-  .block span::before{
-    left: 0;
-    top: 0;
-    transition-duration: 0.4s;
-  }
-  .block:hover::before, .block:hover::after{
-    width: 100%;
-  }
-  .block:hover span::before, .block:hover span::after{
-    height: 100%;
-  }
-  
+}
+#visited{
+  background-color: black;
+  color: rgb(231, 227, 227);
+}
+.btn-category:hover,
+.btn-category:visited {
+  background-color: black;
+  color: rgb(231, 227, 227);
+  outline: none;
+}
+/* css sanphammoi-phobien */
+.sanphammoi {
+  padding: 1rem 1rem 3rem 1rem;
+  text-align: center;
+}
+.item-sanphammoi {
+  width: 100%;
+}
+.name {
+  font-size: 0.9rem;
+  color: #334862;
+  font-weight: lighter;
+  letter-spacing: 2px;
+  position: relative;
+}
+.gia {
+  color: rgb(214, 59, 59);
+}
+.addcart {
+  border: none;
+  background-color: rgb(223, 6, 6);
+  color: rgb(252, 252, 252);
+  font-size: .8rem;
+  height: 2rem;
+  transition: all 400ms ease-in-out;
+  position: absolute;
+  opacity: 0;
+  transform: translateX(-50%);
+  bottom: -15%;
+}
+.sanphammoi:hover .addcart{
+  opacity: 1;
+  bottom: 1%;
+}
+/* css phu kien */
+.img-phukien{
+  width: 100%;
+}
+#section-phukien{
+  width: 90%;
+  margin:0 auto;
+}
