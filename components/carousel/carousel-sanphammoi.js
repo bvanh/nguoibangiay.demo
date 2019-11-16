@@ -9,7 +9,8 @@ export default class Showproduct extends Component {
       dbnewproduct: [],
       dbbestsell: [],
       show: true,
-      color:''
+      color: "",
+      tooltipOpen: false
     };
   }
   componentDidMount() {
@@ -34,14 +35,19 @@ export default class Showproduct extends Component {
         })
       );
   }
+  toggle = () => {
+    this.setState({
+      tooltipOpen: !this.state.tooltipOpen
+    });
+  };
   show = () => {
     this.setState({
-      show: false,
+      show: false
     });
   };
   show1 = () => {
     this.setState({
-      show: true,
+      show: true
     });
   };
   render() {
@@ -79,41 +85,61 @@ export default class Showproduct extends Component {
         }
       ]
     };
-    const { dbnewproduct, dbbestsell, show,color } = this.state;
+    const { dbnewproduct, dbbestsell, show, color, tooltipOpen } = this.state;
     const listnewproduct = dbnewproduct.map((demo, index) => (
       <div key={index} className="sanphammoi">
-        <img src={demo.src} className="item-sanphammoi" />
-        <br />
-        <span className="name">{demo.ten}</span>
-        <br />
-        <span className="gia">{demo.gia.toLocaleString()} đ</span>
-        <br />
-        <button className="addcart">Thêm vào giỏ</button>
+        <div>
+          <img src={demo.src} className="item-sanphammoi" />
+          <br />
+          <span className="name">{demo.ten}</span>
+          <br />
+          <span className="gia">{demo.gia.toLocaleString()} đ</span>
+          <br />
+          <div className="addcart" onClick={() => this.props.addToCart(demo)}>
+            <button>THÊM VÀO GIỎ</button>
+          </div>
+        </div>
       </div>
     ));
     const listbestsell = dbbestsell.map((demo, index) => (
       <div key={index} className="sanphammoi">
-        <img src={demo.src} className="item-sanphammoi" />
-        <br />
-        <span className="name">{demo.ten}</span>
-        <br />
-        <span className="gia">{demo.gia.toLocaleString()} đ</span>
-        <br />
-        <button className="addcart">Thêm vào giỏ</button>
+        <div>
+          <img src={demo.src} className="item-sanphammoi" />
+          <br />
+          <span className="name">{demo.ten}</span>
+          <br />
+          <span className="gia">{demo.gia.toLocaleString()} đ</span>
+          <br />
+          <div className="addcart" onClick={() => this.props.addToCart(demo)}>
+            <button>THÊM VÀO GIỎ</button>
+          </div>
+        </div>
       </div>
     ));
     return (
       <div>
         <div className="category">
-          <button className="btn-category" id={color} onClick={this.show1}>
+          <input
+            type="radio"
+            id="showsanphammoi"
+            name="radio"
+            defaultChecked="checked"
+          />
+          <label
+            className="btn-category"
+            htmlFor="showsanphammoi"
+            onClick={this.show1}
+          >
             SẢN PHẨM MỚI NHẤT
-          </button>
-          <button className="btn-category" id={color} onClick={this.show}>
+          </label>
+          <input type="radio" id="showsanphambanchay" name="radio" />
+          <label
+            className="btn-category"
+            htmlFor="showsanphambanchay"
+            onClick={this.show}
+          >
             SẢN PHẨM BÁN CHẠY
-          </button>
-          <button className="btn-category" id={color} onClick={this.show1}>
-            SẢN PHẨM PHỔ BIẾN
-          </button>
+          </label>
         </div>
         {show ? (
           <Slider {...settings}>{listnewproduct}</Slider>

@@ -1,0 +1,51 @@
+#layout {
+  width: 95%;
+  margin: 0 auto;
+}
+table {
+  width: 100%;
+  padding: 1rem;
+}
+.listright {
+  text-align: right;
+  padding: 0.5rem;
+}
+thead > tr > th {
+  border-top: 0 !important;
+  padding: 1rem 0 .5rem 0;
+}
+tbody > tr > td,
+#name {
+  font-weight: lighter;
+  font-size: 1rem;
+  padding: .5rem 0 .5rem 0;
+}
+tbody {
+  border-top: 2px solid rgb(179, 174, 174);
+  margin-top: 0.5rem;
+}
+#breadcrumb {
+  font-weight: bold;
+  padding: 1rem 0;
+}
+#breadcrumb .divider {
+  top: 0;
+  margin: 0 0.3em;
+  font-weight: 300;
+}
+form {
+  padding: 1rem;
+}
+.form-check{
+    padding:.5rem 0 !important;
+}
+#checkout{
+    border:1.5px solid rgb(228, 148, 148);
+}
+.al{
+    padding:15px !important;
+}
+.btn-success{
+    border-radius: 0;
+    font-weight: bold;
+}

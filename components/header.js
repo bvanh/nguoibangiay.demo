@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import { InputGroup, InputGroupAddon, InputGroupText, Input } from "reactstrap";
+import { InputGroup, Input, Badge } from "reactstrap";
+import Link from "next/link";
+import { connect } from "react-redux";
 
-export default class Header extends Component {
+
+ class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,29 +34,41 @@ export default class Header extends Component {
             width="40"
             height="30"
           />
-          <img src="./static/img/snickers-3-logo.png" className="logo" />
+          <Link href="/">
+            <img src="./static/img/snickers-3-logo.png" className="logo" />
+          </Link>
           <div className="cart">
             <span className="search">
               <img className="icon" src="./static/img/search_icon.png" />
               Giỏ hàng
             </span>
-            <img
-              className="icon"
-              src="./static/img/shopping_cart_icon.png"
-              width="40"
-              height="30"
-            />
+            <span>
+            <Link href="/cart">
+              <img
+                className="icon-cart"
+                src="./static/img/shopping_cart_icon.png"
+                width="40"
+                height="30"
+              />
+              
+            </Link>
+            <Badge color='secondary'>{this.props.db.cart.length}</Badge>
+            </span>
           </div>
         </div>
         <ul className="menubar">
           <li>
-            <a>Trang Chủ</a>
+            <Link href="/">
+              <a>Trang Chủ</a>
+            </Link>
           </li>
           <li>
             <a>Giới Thiệu</a>
           </li>
           <li className="menu">
-            <a> Giày Nữ</a>
+            <Link href="/shoes">
+              <a> Giày Nữ</a>
+            </Link>
             <div className="sub-menu">
               <ul>
                 <li className="sub-menu1">Classic</li>
@@ -63,7 +78,9 @@ export default class Header extends Component {
             </div>
           </li>
           <li className="menu">
-            <a>Giày Nam</a>
+            <Link href="/shoes">
+              <a>Giày Nam</a>
+            </Link>
             <div className="sub-menu">
               <ul>
                 <li className="sub-menu1">Classic</li>
@@ -90,16 +107,24 @@ export default class Header extends Component {
               <Input placeholder="Tìm kiếm" />
             </InputGroup>
             <li>
-              <a>Trang Chủ</a>
+              <Link href="/">
+                <a>Trang Chủ</a>
+              </Link>
             </li>
             <li>
               <a>Giới Thiệu</a>
             </li>
             <li className="menu-mobile">
-              <a>
-                Giày Nữ <b />
-                <img src="./static/img/arrow-down.png" width="15" height="7" />
-              </a>
+              <Link href="/shoes">
+                <a>
+                  Giày Nữ <b />
+                  <img
+                    src="./static/img/arrow-down.png"
+                    width="15"
+                    height="7"
+                  />
+                </a>
+              </Link>
               <div className="sub-menu2">
                 <ul>
                   <li className="sub-menu1">Classic</li>
@@ -109,10 +134,16 @@ export default class Header extends Component {
               </div>
             </li>
             <li className="menu-mobile">
-              <a>
-                Giày Nam <b />
-                <img src="./static/img/arrow-down.png" width="15" height="7" />
-              </a>
+              <Link href="/shoes">
+                <a>
+                  Giày Nam <b />
+                  <img
+                    src="./static/img/arrow-down.png"
+                    width="15"
+                    height="7"
+                  />
+                </a>
+              </Link>
               <div className="sub-menu2">
                 <ul>
                   <li className="sub-menu1">Classic</li>
@@ -136,3 +167,8 @@ export default class Header extends Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  db: state
+});
+
+export default connect(mapStateToProps, null)(Header);

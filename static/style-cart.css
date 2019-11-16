@@ -1,0 +1,58 @@
+#layout {
+  width: 95%;
+  margin: 0 auto;
+}
+.btn {
+  width: 30px;
+}
+.input-group {
+  padding: 0;
+  width: 95px;
+}
+thead > tr > th {
+  border-top: 0 !important;
+  padding-bottom: 0.5rem;
+}
+tbody > tr > td,
+#name {
+  font-weight: lighter;
+  font-size: 1rem;
+}
+tbody {
+  border-top: 2px solid rgb(179, 174, 174);
+  margin-top: 0.5rem;
+}
+#breadcrumb {
+  width: 50%;
+  font-weight: bold;
+  padding-top: 1rem;
+}
+#breadcrumb .divider {
+  top: 0;
+  margin: 0 0.3em;
+  font-weight: 300;
+}
+table {
+  width: 100%;
+}
+.listright {
+  text-align: right;
+  padding: 0.5rem;
+}
+#btn-thanhtoan {
+  width: 100%;
+  border-radius: 0;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+#btn-appcode {
+  width: 100%;
+  border-radius: 0;
+  font-weight: bold;
+}
+.form-control{
+    border-radius: 0;
+}
+.col-lg-5,.col-lg-7{
+    padding-top:2rem;
+}
