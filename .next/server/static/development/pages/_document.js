@@ -452,6 +452,7 @@ exports.PHASE_DEVELOPMENT_SERVER = 'phase-development-server';
 exports.PAGES_MANIFEST = 'pages-manifest.json';
 exports.BUILD_MANIFEST = 'build-manifest.json';
 exports.PRERENDER_MANIFEST = 'prerender-manifest.json';
+exports.ROUTES_MANIFEST = 'routes-manifest.json';
 exports.REACT_LOADABLE_MANIFEST = 'react-loadable-manifest.json';
 exports.SERVER_DIRECTORY = 'server';
 exports.SERVERLESS_DIRECTORY = 'serverless';
@@ -467,12 +468,15 @@ exports.CLIENT_STATIC_FILES_RUNTIME_MAIN = `${exports.CLIENT_STATIC_FILES_RUNTIM
 
 exports.CLIENT_STATIC_FILES_RUNTIME_AMP = `${exports.CLIENT_STATIC_FILES_RUNTIME_PATH}/amp.js`; // static/runtime/webpack.js
 
-exports.CLIENT_STATIC_FILES_RUNTIME_WEBPACK = `${exports.CLIENT_STATIC_FILES_RUNTIME_PATH}/webpack.js`; // matches static/<buildid>/pages/<page>.js
+exports.CLIENT_STATIC_FILES_RUNTIME_WEBPACK = `${exports.CLIENT_STATIC_FILES_RUNTIME_PATH}/webpack.js`; // static/runtime/polyfills.js
+
+exports.CLIENT_STATIC_FILES_RUNTIME_POLYFILLS = `${exports.CLIENT_STATIC_FILES_RUNTIME_PATH}/polyfills.js`; // matches static/<buildid>/pages/<page>.js
 
 exports.IS_BUNDLED_PAGE_REGEX = /^static[/\\][^/\\]+[/\\]pages.*\.js$/; // matches static/<buildid>/pages/:page*.js
 
 exports.ROUTE_NAME_REGEX = /^static[/\\][^/\\]+[/\\]pages[/\\](.*)\.js$/;
 exports.SERVERLESS_ROUTE_NAME_REGEX = /^pages[/\\](.*)\.js$/;
+exports.DEFAULT_REDIRECT_STATUS = 307;
 
 /***/ }),
 
@@ -532,11 +536,14 @@ const url_1 = __webpack_require__(/*! url */ "url");
 
 function execOnce(fn) {
   let used = false;
+  let result = null;
   return (...args) => {
     if (!used) {
       used = true;
-      fn.apply(this, args);
+      result = fn.apply(this, args);
     }
+
+    return result;
   };
 }
 
@@ -575,10 +582,10 @@ function isResSent(res) {
 
 exports.isResSent = isResSent;
 
-async function loadGetInitialProps(Component, ctx) {
+async function loadGetInitialProps(App, ctx) {
   if (true) {
-    if (Component.prototype && Component.prototype.getInitialProps) {
-      const message = `"${getDisplayName(Component)}.getInitialProps()" is defined as an instance method - visit https://err.sh/zeit/next.js/get-initial-props-as-an-instance-method for more information.`;
+    if (App.prototype && App.prototype.getInitialProps) {
+      const message = `"${getDisplayName(App)}.getInitialProps()" is defined as an instance method - visit https://err.sh/zeit/next.js/get-initial-props-as-an-instance-method for more information.`;
       throw new Error(message);
     }
   } // when called from _app `ctx` is nested in `ctx`
@@ -586,24 +593,31 @@ async function loadGetInitialProps(Component, ctx) {
 
   const res = ctx.res || ctx.ctx && ctx.ctx.res;
 
-  if (!Component.getInitialProps) {
+  if (!App.getInitialProps) {
+    if (ctx.ctx && ctx.Component) {
+      // @ts-ignore pageProps default
+      return {
+        pageProps: await loadGetInitialProps(ctx.Component, ctx.ctx)
+      };
+    }
+
     return {};
   }
 
-  const props = await Component.getInitialProps(ctx);
+  const props = await App.getInitialProps(ctx);
 
   if (res && isResSent(res)) {
     return props;
   }
 
   if (!props) {
-    const message = `"${getDisplayName(Component)}.getInitialProps()" should resolve to an object. But found "${props}" instead.`;
+    const message = `"${getDisplayName(App)}.getInitialProps()" should resolve to an object. But found "${props}" instead.`;
     throw new Error(message);
   }
 
   if (true) {
     if (_Object$keys(props).length === 0 && !ctx.ctx) {
-      console.warn(`${getDisplayName(Component)} returned an empty object from \`getInitialProps\`. This de-optimizes and prevents automatic static optimization. https://err.sh/zeit/next.js/empty-object-getInitialProps`);
+      console.warn(`${getDisplayName(App)} returned an empty object from \`getInitialProps\`. This de-optimizes and prevents automatic static optimization. https://err.sh/zeit/next.js/empty-object-getInitialProps`);
     }
   }
 
@@ -644,26 +658,16 @@ exports.SUPPORTS_PERFORMANCE_USER_TIMING = exports.SUPPORTS_PERFORMANCE && typeo
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const constants_1 = __webpack_require__(/*! ../lib/constants */ "./node_modules/next/dist/next-server/lib/constants.js");
-const internalPrefixes = [/^\/_next\//, /^\/static\//];
-function isInternalUrl(url) {
-    for (const prefix of internalPrefixes) {
-        if (prefix.test(url)) {
-            return true;
-        }
-    }
-    return false;
-}
-exports.isInternalUrl = isInternalUrl;
 function isBlockedPage(pathname) {
     return constants_1.BLOCKED_PAGES.indexOf(pathname) !== -1;
 }
 exports.isBlockedPage = isBlockedPage;
 function cleanAmpPath(pathname) {
     if (pathname.match(/\?amp=(y|yes|true|1)/)) {
-        pathname = pathname.replace(/\?amp=(y|yes|true|1)/, '?');
+        pathname = pathname.replace(/\?amp=(y|yes|true|1)&?/, '?');
     }
     if (pathname.match(/&amp=(y|yes|true|1)/)) {
-        pathname = pathname.replace(/\?amp=(y|yes|true|1)/, '');
+        pathname = pathname.replace(/&amp=(y|yes|true|1)/, '');
     }
     pathname = pathname.replace(/\?$/, '');
     return pathname;
@@ -683,7 +687,7 @@ exports.cleanAmpPath = cleanAmpPath;
 "use strict";
 
 
-var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "./node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
+var _interopRequireWildcard3 = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "./node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js");
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "./node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
 
@@ -701,31 +705,33 @@ var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-co
 
 var _now = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/date/now */ "./node_modules/@babel/runtime-corejs2/core-js/date/now.js"));
 
+var _promise = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/promise */ "./node_modules/@babel/runtime-corejs2/core-js/promise.js"));
+
+var _interopRequireWildcard2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireWildcard */ "./node_modules/@babel/runtime-corejs2/helpers/interopRequireWildcard.js"));
+
 var _set = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/set */ "./node_modules/@babel/runtime-corejs2/core-js/set.js"));
 
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/asyncToGenerator */ "./node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js"));
 
 var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "prop-types"));
 
-var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
-
-var _utils = __webpack_require__(/*! ../next-server/server/utils */ "./node_modules/next/dist/next-server/server/utils.js");
-
-var _utils2 = __webpack_require__(/*! ../next-server/lib/utils */ "./node_modules/next/dist/next-server/lib/utils.js");
-
-exports.DocumentContext = _utils2.DocumentContext;
-exports.DocumentInitialProps = _utils2.DocumentInitialProps;
-exports.DocumentProps = _utils2.DocumentProps;
-
-var _htmlescape = __webpack_require__(/*! ../server/htmlescape */ "./node_modules/next/dist/server/htmlescape.js");
+var _react = _interopRequireWildcard3(__webpack_require__(/*! react */ "react"));
 
 var _server = _interopRequireDefault(__webpack_require__(/*! styled-jsx/server */ "styled-jsx/server"));
 
 var _constants = __webpack_require__(/*! ../next-server/lib/constants */ "./node_modules/next/dist/next-server/lib/constants.js");
 
 var _documentContext = __webpack_require__(/*! ../next-server/lib/document-context */ "./node_modules/next/dist/next-server/lib/document-context.js");
-/* eslint-disable */
 
+var _utils = __webpack_require__(/*! ../next-server/lib/utils */ "./node_modules/next/dist/next-server/lib/utils.js");
+
+exports.DocumentContext = _utils.DocumentContext;
+exports.DocumentInitialProps = _utils.DocumentInitialProps;
+exports.DocumentProps = _utils.DocumentProps;
+
+var _utils2 = __webpack_require__(/*! ../next-server/server/utils */ "./node_modules/next/dist/next-server/server/utils.js");
+
+var _htmlescape = __webpack_require__(/*! ../server/htmlescape */ "./node_modules/next/dist/server/htmlescape.js");
 
 function middleware(_x) {
   return _middleware.apply(this, arguments);
@@ -759,6 +765,10 @@ function getOptionalModernScriptVariant(path) {
 
   return path;
 }
+
+function isLowPriority(file) {
+  return file.includes('_buildManifest');
+}
 /**
 * `Document` component handles the initial `document` markup and renders only on the server side.
 * Commonly used for implementing server side rendering for `css-in-js` libraries.
@@ -770,17 +780,26 @@ class Document extends _react.Component {
   * `getInitialProps` hook returns the context object with the addition of `renderPage`.
   * `renderPage` callback executes `React` rendering logic synchronously to support server-rendering wrappers
   */
-  static getInitialProps(_ref2) {
+  static getInitialProps(ctx) {
     return (0, _asyncToGenerator2.default)(function* () {
-      var {
-        renderPage
-      } = _ref2;
+      var enhancers =  false ? undefined : [];
+
+      var enhanceApp = App => {
+        for (var enhancer of enhancers) {
+          App = enhancer(App);
+        }
+
+        return props => _react.default.createElement(App, props);
+      };
+
       var {
         html,
         head,
         dataOnly
-      } = yield renderPage();
-      var styles = (0, _server.default)();
+      } = yield ctx.renderPage({
+        enhanceApp
+      });
+      var styles = [...(0, _server.default)(), ...( false ? undefined : [])];
       return {
         html,
         head,
@@ -809,6 +828,9 @@ class Document extends _react.Component {
 }
 
 exports.default = Document;
+Document.headTagsMiddleware =  false ? undefined : () => [];
+Document.bodyTagsMiddleware =  false ? undefined : () => [];
+Document.htmlPropsMiddleware =  false ? undefined : () => [];
 
 class Html extends _react.Component {
   constructor() {
@@ -818,9 +840,10 @@ class Html extends _react.Component {
 
   render() {
     var {
-      inAmpMode
+      inAmpMode,
+      htmlProps
     } = this.context._documentProps;
-    return _react.default.createElement("html", (0, _extends2.default)({}, this.props, {
+    return _react.default.createElement("html", (0, _extends2.default)({}, htmlProps, this.props, {
       amp: inAmpMode ? '' : undefined,
       "data-ampdevmode": inAmpMode && "development" !== 'production' ? '' : undefined
     }));
@@ -849,7 +872,7 @@ class Head extends _react.Component {
     var cssLinkElements = [];
     cssFiles.forEach(file => {
       cssLinkElements.push(_react.default.createElement("link", {
-        key: "${file}-preload",
+        key: file + "-preload",
         nonce: this.props.nonce,
         rel: "preload",
         href: assetPrefix + "/_next/" + encodeURI(file),
@@ -907,9 +930,9 @@ class Head extends _react.Component {
       // the feature is enabled. This clause will filter down to the
       // modern variants only.
       //
-      // Also filter out _buildManifest because it should not be
+      // Also filter out low priority files because they should not be
       // preloaded for performance reasons.
-      return file.endsWith(getOptionalModernScriptVariant('.js')) && !file.includes('_buildManifest');
+      return file.endsWith(getOptionalModernScriptVariant('.js')) && !isLowPriority(file);
     }) : [];
     return preloadFiles.length === 0 ? null : preloadFiles.map(file => {
       return _react.default.createElement("link", {
@@ -932,7 +955,8 @@ class Head extends _react.Component {
       hybridAmp,
       canonicalBase,
       __NEXT_DATA__,
-      dangerousAsPath
+      dangerousAsPath,
+      headTags
     } = this.context._documentProps;
     var {
       _devOnlyInvalidateCacheQueryString
@@ -1012,7 +1036,7 @@ class Head extends _react.Component {
       var hasStyles = el => el && el.props && el.props.dangerouslySetInnerHTML && el.props.dangerouslySetInnerHTML.__html; // @ts-ignore Property 'props' does not exist on type ReactElement
 
 
-      styles.props.children.map(child => {
+      styles.props.children.forEach(child => {
         if ((0, _isArray.default)(child)) {
           child.map(el => hasStyles(el) && curStyles.push(el));
         } else if (hasStyles(child)) {
@@ -1040,7 +1064,7 @@ class Head extends _react.Component {
       content: "width=device-width,minimum-scale=1,initial-scale=1"
     }), !hasCanonicalRel && _react.default.createElement("link", {
       rel: "canonical",
-      href: canonicalBase + (0, _utils.cleanAmpPath)(dangerousAsPath)
+      href: canonicalBase + (0, _utils2.cleanAmpPath)(dangerousAsPath)
     }), _react.default.createElement("link", {
       rel: "preload",
       as: "script",
@@ -1083,7 +1107,7 @@ class Head extends _react.Component {
     // (by default, style-loader injects at the bottom of <head />)
     _react.default.createElement("noscript", {
       id: "__next_css__DO_NOT_USE__"
-    }), this.getCssLinks(), styles || null));
+    }), this.getCssLinks(), styles || null), _react.default.createElement(_react.default.Fragment, {}, ...(headTags || [])));
   }
 
 }
@@ -1165,12 +1189,9 @@ class NextScript extends _react.Component {
     var {
       _devOnlyInvalidateCacheQueryString
     } = this.context;
-    return files.map(file => {
-      // Only render .js files here
-      if (!/\.js$/.test(file)) {
-        return null;
-      }
-
+    var normalScripts = files.filter(file => file.endsWith('.js') && !isLowPriority(file));
+    var lowPriorityScripts = files.filter(file => file.endsWith('.js') && isLowPriority(file));
+    return [...normalScripts, ...lowPriorityScripts].map(file => {
       var modernProps = {};
 
       if (false) {}
@@ -1184,6 +1205,25 @@ class NextScript extends _react.Component {
         crossOrigin: this.props.crossOrigin || undefined
       }, modernProps));
     });
+  }
+
+  getPolyfillScripts() {
+    // polyfills.js has to be rendered as nomodule without async
+    // It also has to be the first script to load
+    var {
+      assetPrefix,
+      polyfillFiles
+    } = this.context._documentProps;
+    var {
+      _devOnlyInvalidateCacheQueryString
+    } = this.context;
+    return polyfillFiles.filter(polyfill => !/\.module\.js$/.test(polyfill)).map(polyfill => _react.default.createElement("script", {
+      key: polyfill,
+      nonce: this.props.nonce,
+      crossOrigin: this.props.crossOrigin || undefined,
+      noModule: true,
+      src: assetPrefix + "/_next/" + polyfill + _devOnlyInvalidateCacheQueryString
+    }));
   }
 
   static getInlineScriptSource(documentProps) {
@@ -1209,7 +1249,8 @@ class NextScript extends _react.Component {
       assetPrefix,
       inAmpMode,
       devFiles,
-      __NEXT_DATA__
+      __NEXT_DATA__,
+      bodyTags
     } = this.context._documentProps;
     var deferScripts = false;
     var {
@@ -1235,7 +1276,7 @@ class NextScript extends _react.Component {
         nonce: this.props.nonce,
         crossOrigin: this.props.crossOrigin || undefined,
         "data-ampdevmode": true
-      })) : null);
+      })) : null, _react.default.createElement(_react.default.Fragment, {}, ...(bodyTags || [])));
     }
 
     var {
@@ -1278,7 +1319,7 @@ class NextScript extends _react.Component {
       dangerouslySetInnerHTML: {
         __html: NextScript.getInlineScriptSource(this.context._documentProps)
       }
-    }),  false ? undefined : null, page !== '/_error' && pageScript, appScript, staticMarkup ? null : this.getDynamicChunks(), staticMarkup ? null : this.getScripts());
+    }),  false ? undefined : null, this.getPolyfillScripts(), page !== '/_error' && pageScript, appScript, staticMarkup ? null : this.getDynamicChunks(), staticMarkup ? null : this.getScripts(), _react.default.createElement(_react.default.Fragment, {}, ...(bodyTags || [])));
   }
 
 }
@@ -1364,7 +1405,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _jsxFileName = "C:\\Users\\buianh\\Desktop\\Github\\nguoibangiay.demo\\pages\\_document.js";
+var _jsxFileName = "C:\\Users\\buianh\\Desktop\\Github\\webbangiay-demo\\pages\\_document.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement;
 
