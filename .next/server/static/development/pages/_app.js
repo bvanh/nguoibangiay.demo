@@ -713,16 +713,64 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 /* harmony default export */ __webpack_exports__["default"] = ((state, action) => {
   switch (action.type) {
-    case "sanphammoi":
+    case "SHOW_PRODUCTS":
       return _objectSpread({}, state, {
         category: action.type,
-        cart: action
+        allproducts: action.db
+      });
+
+    case "GET_NEWPRODUCTS":
+      return _objectSpread({}, state, {
+        sanphammoi: action.db
+      });
+
+    case "GET_BESTSELLPRODUCTS":
+      return _objectSpread({}, state, {
+        sanphambanchay: action.db
+      });
+
+    case "GET_PHUKIEN":
+      return _objectSpread({}, state, {
+        phukien: action.db
       });
 
     case "ADD_TOCART":
+      let addcart = [...state.cart];
+      addcart.push(action.payload.db);
       return _objectSpread({}, state, {
         category: action.type,
-        cart: [...state.cart, action.db]
+        cart: addcart // cách 2 thêm sản phẩm
+        // cart: [...state.cart, action.payload.db]
+
+      });
+
+    case "DELETE_CART":
+      let newcart = [...state.cart.filter((elem, idx) => {
+        return elem !== action.payload.db;
+      })];
+      return _objectSpread({}, state, {
+        cart: newcart
+      });
+
+    case "PLUS_PRODUCTS":
+      if (state.cart[action.payload.id].quantity < 9) {
+        state.cart[action.payload.id].quantity++;
+        return _objectSpread({}, state, {
+          category: action.type
+        });
+      }
+
+    case "MINUS_PRODUCTS":
+      if (state.cart[action.payload.id].quantity > 1) {
+        state.cart[action.payload.id].quantity--;
+        return _objectSpread({}, state, {
+          category: action.type
+        });
+      }
+
+    case "SORT_ASC":
+      return _objectSpread({}, state, {
+        allproducts: action.payload.db
       });
 
     default:
@@ -749,7 +797,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const initialState = {
   category: "demo",
-  cart: []
+  cart: [],
+  allproducts: [],
+  sanphammoi: [],
+  sanphambanchay: [],
+  phukien: [],
+  sanphamkhuyenmai: []
 };
 const store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_index__WEBPACK_IMPORTED_MODULE_1__["default"], initialState);
 

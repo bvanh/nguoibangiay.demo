@@ -23,6 +23,8 @@ import { connect } from "react-redux";
     });
   }
   render() {
+    const cart=this.props.db.cart
+    const numberproducts=cart.filter((item,index)=>cart.indexOf(item)===index)
     return (
       <header>
         <div className="header">
@@ -50,9 +52,8 @@ import { connect } from "react-redux";
                 width="40"
                 height="30"
               />
-              
             </Link>
-            <Badge color='secondary'>{this.props.db.cart.length}</Badge>
+            <Badge color='secondary'>{numberproducts.length}</Badge>
             </span>
           </div>
         </div>

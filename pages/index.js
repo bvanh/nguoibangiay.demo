@@ -4,28 +4,30 @@ import { connect } from "react-redux";
 import SimpleSlider from "../components/carousel/carousel-banner";
 import url from "../components/link-data";
 import { Row, Col } from "reactstrap";
-import { dispatchAddToCart } from "./actions/index";
-import Showproduct from "../components/carousel/carousel-sanphammoi";
+import {dispatchAddToCart,dispatchPhukien,dispatchShowProducts} from "./actions/index";
+import Showproduct from "../components/carousel-sanphammoi";
 
 class Homepage extends React.Component {
   constructor(props) {
     super(props);
     this;
     this.state = {
-      dataphukien: [],
       datakhuyenmai: []
     };
   }
   componentDidMount() {
+    // get data tatcasanpham
+    fetch(`${url}tatcasanpham?_page=1&_limit=12`)
+    .then(result => {
+      return result.json();
+    })
+    .then(db => dispatchShowProducts(db));
     // get data phukien
     fetch(`${url}phukien`)
       .then(result => {
         return result.json();
       })
-      .then(data =>
-        this.setState({
-          dataphukien: data
-        })
+      .then(data =>dispatchPhukien(data)     
       );
     // get data khuyen mai
     fetch(`${url}khuyenmai`)
@@ -38,11 +40,9 @@ class Homepage extends React.Component {
         })
       );
   }
-  componentDidUpdate() {
-    console.log(this.props.db);
-  }
   render() {
-    const { dataphukien, datakhuyenmai } = this.state;
+    const {datakhuyenmai } = this.state;
+    const dataphukien=this.props.db.phukien;
     const listphukien = dataphukien.map((data, index) => (
       <Col xs="6" sm="4" lg="3" key={index} className="phukien">
         <div>
@@ -60,8 +60,8 @@ class Homepage extends React.Component {
         >
           Thêm vào giỏ
         </button> */}
-          <div className="addcart" onClick={e => dispatchAddToCart(data, e)}>
-            <button>THÊM VÀO GIỎ</button>
+          <div className="addcart" onClick={dispatchAddToCart.bind(this,data,index)}>
+            <button disabled={data.statusAddToCart}>THÊM VÀO GIỎ</button>
           </div>
         </div>
       </Col>
@@ -82,7 +82,7 @@ class Homepage extends React.Component {
             {((data.gia * 70) / 100).toLocaleString()} đ
           </span>
           <br />
-          <div className="addcart" onClick={e => dispatchAddToCart(data, e)}>
+          <div className="addcart" onClick={dispatchAddToCart.bind(this,data,index)}>
             <button>THÊM VÀO GIỎ</button>
           </div>
           <div className="callout badge badge-circle">
@@ -150,8 +150,9 @@ class Homepage extends React.Component {
           </Row>
           {/* section2-sanphammoi */}
           <Showproduct
-            addToCart={dispatchAddToCart.bind(this)}
+            // addToCart={dispatchAddToCart.bind(this)}
             // cach 2 addToCart={(e)=>dispatchBtnAction.bind(this,e)}
+            // truyền hàm
           />
           {/* section3-phukien */}
           <div className="section3">

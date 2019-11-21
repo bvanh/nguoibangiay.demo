@@ -3,55 +3,30 @@ import Head from "next/head";
 import Layout from "./layout";
 import Link from "next/link";
 import url from "../components/link-data";
-import { dispatchAddToCart } from "./actions/index";
+import fetch from "isomorphic-unfetch";
+import Phantrang from "../components/phantrang";
 import {
-  Row,
-  Col,
-  CustomInput,
-  Button,
-  FormGroup,
-  Label,
-  Media,
-  Pagination,
-  PaginationItem,
-  PaginationLink
-} from "reactstrap";
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
-} from "reactstrap";
+  dispatchAddToCart,
+  dispatchShowProducts,
+  dispatchSort
+} from "./actions/index";
+import { connect } from "react-redux";
+import { Row, Col, Media } from "reactstrap";
+import FilterToOrder from "../components/filter";
+import FilterforPrice from "../components/filterPrice";
 
 class Shoes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dropdownOpen: false,
       allproducts: [],
       allproductspage1: [],
-      page: 1,
       customRange: 1000000,
       datakhuyenmai: [],
-      datatintuc: [],
-      btnactive1: true,
-      btnactive2: false
+      datatintuc: []
     };
   }
   componentDidMount() {
-    const dataproducts = [];
-    // get data all products
-    fetch(`${url}sanphammoi?_page=${this.state.page}&_limit=4`)
-      .then(result => {
-        return result.json();
-      })
-      .then(db => db.map(data => dataproducts.push(data)));
-    fetch(`${url}sanphambanchay?_page=${this.state.page}&_limit=8`)
-      .then(result => {
-        return result.json();
-      })
-      .then(db => db.map(data => dataproducts.push(data)));
-    // end
     // get data product sale-off sidebar
     fetch(`${url}khuyenmai?_start=0&_limit=5`)
       .then(result => {
@@ -73,52 +48,19 @@ class Shoes extends React.Component {
           datatintuc: db
         })
       );
-    this.setState({
-      allproducts: dataproducts,
-      allproductspage1: dataproducts
-    });
   }
-  toggle = () =>
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
-  customrange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  };
-  goPage = () => {
-    fetch(`${url}sanphammoi?_page=2&_limit=4`)
-      .then(result => {
-        return result.json();
-      })
-      .then(db =>
-        this.setState({
-          page: 2,
-          btnactive1: false,
-          btnactive2: true,
-          allproducts: db
-        })
-      );
-  };
-  goPage1 = () => {
-    this.setState({
-      allproducts: this.state.allproductspage1,
-      btnactive1: true,
-      btnactive2: false
-    });
-  };
   render() {
+    const { datakhuyenmai, datatintuc } = this.state;
     const {
-      dropdownOpen,
-      allproducts,
-      customRange,
-      datakhuyenmai,
-      datatintuc,
-      btnactive1,
-      btnactive2
-    } = this.state;
-    const listallproducts = allproducts.map((data, index) => (
+      currentPage,
+      products,
+      totalItems,
+      limit,
+      sort,
+      order
+    } = this.props;
+    const numberProducts = products.length;
+    const listallproducts = products.map((data, index) => (
       <Col xs="6" sm="4" lg="3" key={index}>
         <div className="products">
           <Link href="/detail">
@@ -129,10 +71,10 @@ class Shoes extends React.Component {
           <br />
           <span className="gia">{data.gia.toLocaleString()} đ</span>
           <br />
-
           <button
             className="addcart"
-            onClick={dispatchAddToCart.bind(this, data)}
+            onClick={dispatchAddToCart.bind(this,data)}
+            disabled={data.statusAddToCart}
           >
             Thêm vào giỏ
           </button>
@@ -185,38 +127,16 @@ class Shoes extends React.Component {
                 <span>SHOES</span>
               </div>
               <div id="sort">
-                <p id="hienthiketqua">Hiển thị...trong...kết quả</p>
-                <Dropdown isOpen={dropdownOpen} onClick={this.toggle}>
-                  <DropdownToggle caret>Thứ tự mặc định</DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem>Mới nhất</DropdownItem>
-                    <DropdownItem>Thứ tự theo điểm đánh giá</DropdownItem>
-                    <DropdownItem>Thứ tự theo giá: Thấp => Cao </DropdownItem>
-                    <DropdownItem>Thứ tự theo giá: Cao => Thấp </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
+                <p id="hienthiketqua">
+                  Hiển thị <b>{numberProducts}</b> trong <b>{totalItems}</b> sản phẩm
+                </p>
+                <FilterToOrder />
               </div>
             </div>
             <Row>
               <Col lg="3" id="sidebar">
                 <h6>LỌC THEO GIÁ</h6>
-                <FormGroup>
-                  <CustomInput
-                    type="range"
-                    id="exampleCustomRange"
-                    name="customRange"
-                    value={customRange}
-                    min="500"
-                    max="2000000"
-                    onChange={this.customrange}
-                  />
-                  <Label for="exampleCustomRange">
-                    {customRange.toLocaleString()} đ
-                    <Button color="secondary" size="sm">
-                      Lọc
-                    </Button>
-                  </Label>
-                </FormGroup>
+                <FilterforPrice />
                 <h6>KHUYỄN MÃI</h6>
                 {listkhuyenmai}
                 <h6 style={{ padding: "1.5rem 0 .7rem 0", margin: "0" }}>
@@ -227,20 +147,13 @@ class Shoes extends React.Component {
               <Col lg="9" id="products">
                 <Row>
                   {listallproducts}
-                  <Pagination className="Pagenavigationexample">
-                    <PaginationItem disabled>
-                      <PaginationLink previous href="#" />
-                    </PaginationItem>
-                    <PaginationItem active={btnactive1} onClick={this.goPage1}>
-                      <PaginationLink>1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem active={btnactive2} onClick={this.goPage}>
-                      <PaginationLink>2</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink next href="#" />
-                    </PaginationItem>
-                  </Pagination>
+                  <Phantrang
+                    totalItems={totalItems}
+                    currentPage={currentPage}
+                    numberItemsPerPage={limit}
+                    sort={sort}
+                    order={order}
+                  />
                 </Row>
               </Col>
             </Row>
@@ -250,5 +163,28 @@ class Shoes extends React.Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  db: state
+});
 
-export default Shoes;
+Shoes.getInitialProps = async function({ query }) {
+  const page = query.page || 1;
+  const limit = 12;
+  const sort = query.sort || "id";
+  const order = query.order || "asc";
+  const gialess = query.gia_lte || 5000000;
+  const res = await fetch(
+    `${url}tatcasanpham?_sort=${sort}&_order=${order}&_page=${page}&_limit=${limit}&gia_lte=${gialess}`
+  );
+  const data = await res.json();
+
+  return {
+    products: data,
+    totalItems: res.headers.get("X-Total-Count"),
+    currentPage: page,
+    limit: limit,
+    sort: sort,
+    order: order
+  };
+};
+export default connect(mapStateToProps, null)(Shoes);

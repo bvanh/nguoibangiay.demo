@@ -2,8 +2,8 @@ import React from "react";
 import Head from "next/head";
 import Layout from "./layout";
 import Link from "next/link";
-import url from "../components/link-data";
 import { connect } from "react-redux";
+import { deleteProducts } from "./actions/index";
 import {
   Row,
   Col,
@@ -16,58 +16,98 @@ class Cart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // ten: "",
-      // img: "",
-      // soluong: 0,
-      // gia: 0
+      dataCart: this.props.db.cart,
+      numberPerProduct: []
     };
   }
-  // async componentDidMount() {
-  //   await fetch(`${url}sanphammoi/1`)
-  //     .then(result => {
-  //       return result.json();
-  //     })
-  //     .then(db =>
-  //       this.setState({
-  //         ten: db.ten,
-  //         img: db.src,
-  //         soluong: db.quantity,
-  //         gia: db.gia
-  //       })
-  //     );
-  // }
+  thaydoiSoluong = (index, isWhat) => {
+    let newNumberProduct = this.state.numberPerProduct;
+    if (isWhat === "isTang" && newNumberProduct[index] < 9) {
+      newNumberProduct[index]++;
+    } else if (isWhat === "isGiam" && newNumberProduct[index] > 1) {
+      newNumberProduct[index]--;
+    }
+    this.setState({
+      numberPerProduct: newNumberProduct
+    });
+  };
+  nhapSoluong = (i, val) => {
+    let x = parseInt(val);
+    const newNumberProduct = this.state.numberPerProduct;
+    if (x > 0 && x < 10) {
+      newNumberProduct[i] = x;
+    }
+    this.setState({
+      numberPerProduct: newNumberProduct
+    });
+  };
   render() {
-    // const { ten, img, soluong, gia } = this.state;
-    const { dataCart } = this.props.db.cart;
-    const printProduct = dataCart.map((data, index) => (
-      <tr>
-        <td style={{ width: "50%" }}>
-          <img
-            src="../static/img/trash.png"
-            style={{ width: "6%", paddingRight: ".3rem" }}
-          />
-          <img src={data.src} style={{ width: "30%" }} />
-          <span id="name">{data.ten}</span>
-        </td>
-        <td id="demo">
-          <span>{data.gia}</span>
-        </td>
-        <td>
-          <div id="checksize">
-            <InputGroup>
-              <InputGroupAddon addonType="prepend">
-                <Button color="danger">-</Button>
-              </InputGroupAddon>
-              <Input defaultValue="1" />
-              <InputGroupAddon addonType="append">
-                <Button color="success">+</Button>
-              </InputGroupAddon>
-            </InputGroup>
-          </div>
-        </td>
-        <td style={{ textAlign: "right" }}>1000000</td>
-      </tr>
-    ));
+    const { dataCart, numberPerProduct } = this.state;
+    const bindCart = dataCart.filter(
+      (data, index) => dataCart.indexOf(data) === index
+    );
+    let count = 1;
+    for (let i = 0; i < dataCart.length; i += count) {
+      count = 1;
+      for (let j = i + 1; j < dataCart.length; j++) {
+        if (dataCart[i] === dataCart[j]) {
+          count++;
+        }
+      }
+      numberPerProduct.push(count);
+    }
+
+    let totalPrice = 0;
+    const printProduct = [];
+    for (let i = 0; i < bindCart.length; i++) {
+      const data = bindCart[i];
+      totalPrice += data.gia * numberPerProduct[i];
+      printProduct.push(
+        <tr key={i}>
+          <td style={{ width: "50%" }}>
+            <img
+              src="../static/img/trash.png"
+              style={{ width: "6%", paddingRight: ".3rem", cursor: "pointer" }}
+              onClick={deleteProducts.bind(this, data)}
+            />
+            <img src={data.src} style={{ width: "30%" }} />
+            <span id="name">{data.ten}</span>
+          </td>
+          <td id="demo">
+            <span>{data.gia.toLocaleString()} đ</span>
+          </td>
+          <td>
+            <div id="checksize">
+              <InputGroup>
+                <InputGroupAddon addonType="prepend">
+                  <Button
+                    color="danger"
+                    onClick={() => this.thaydoiSoluong(i, "isGiam")}
+                  >
+                    -
+                  </Button>
+                </InputGroupAddon>
+                <Input
+                  value={numberPerProduct[i]}
+                  onChange={() => this.nhapSoluong(i, event.target.value)}
+                />
+                <InputGroupAddon addonType="append">
+                  <Button
+                    color="success"
+                    onClick={() => this.thaydoiSoluong(i, "isTang")}
+                  >
+                    +
+                  </Button>
+                </InputGroupAddon>
+              </InputGroup>
+            </div>
+          </td>
+          <td style={{ textAlign: "right" }}>
+            {(numberPerProduct[i] * data.gia).toLocaleString()} đ
+          </td>
+        </tr>
+      );
+    }
     return (
       <div>
         <Head>
@@ -100,9 +140,7 @@ class Cart extends React.Component {
                       <th style={{ textAlign: "right" }}>Tổng</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {printProduct}
-                  </tbody>
+                  <tbody>{printProduct}</tbody>
                 </table>
               </Col>
               <Col lg="5">
@@ -115,9 +153,14 @@ class Cart extends React.Component {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Tổng phụ</td>
-                      <td className="listright">
-                        <span>{gia}</span>
+                      <td style={{ paddingTop: "1rem", paddingBottom: "0" }}>
+                        Tổng phụ
+                      </td>
+                      <td
+                        className="listright"
+                        style={{ paddingTop: "1rem", paddingBottom: "0" }}
+                      >
+                        {totalPrice.toLocaleString()} đ
                       </td>
                     </tr>
                     <tr>
@@ -152,7 +195,7 @@ class Cart extends React.Component {
                     </tr>
                   </tbody>
                 </table>
-                <Link href="/thanhtoan">
+                <Link href={{ pathname: '/thanhtoan', query:numberPerProduct }}>
                   <Button color="danger" id="btn-thanhtoan">
                     TIẾN HÀNH THANH TOÁN
                   </Button>
