@@ -1,7 +1,7 @@
 {
   "name": "nguoibangiay.demo",
   "version": "1.0.0",
-  "description": "",
+  "description": "webbangiaybyme",
   "main": "index.js",
   "scripts": {
     "dev": "next",
@@ -9,7 +9,7 @@
     "start": "next start"
   },
   "keywords": [],
-  "author": "",
+  "author": "bvanh194",
   "license": "ISC",
   "dependencies": {
     "isomorphic-unfetch": "^3.0.0",
